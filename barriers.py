@@ -56,8 +56,8 @@ class Barrier:
   # def mid_arch(i, j, factor): return False
 
   def __init__(self, game, rect):
-    # self.alien_lasers = game.alien_lasers
-    # self.ship_lasers = game.ship_lasers
+    self.alien_lasers = game.aliens
+    self.ship_lasers = game.aliens.ship
     self.screen = game.screen    
     self.pieces = Group()
     npieces = 169
@@ -72,25 +72,18 @@ class Barrier:
 
   def __str__(self): 
     return f'piece at {self.rect} with color {self.color}'
-
-    # self.image = pg.image.load('images/alien0.bmp')
-    # self.rect = self.image.get_rect()
-    # self.rect.y = self.rect.height
-    # self.x = float(self.rect.x)
       
   def hit(self): pass
 
   def update(self): 
-    # collisions = pg.sprite.groupcollide(self.alien_lasers.lasers, self.pieces, True, True)
-    # collisions = pg.sprite.groupcollide(self.ship_lasers.lasers, self.pieces, True, True)
+    collisions = pg.sprite.groupcollide(self.alien_lasers.lasers.lasergroup(), self.pieces, True, True)
+    collisions = pg.sprite.groupcollide(self.ship_lasers.lasers.lasergroup(), self.pieces, True, True)
     self.draw()
 
   def draw(self): 
     for piece in self.pieces:
         piece.draw()
-        # pg.draw.rect(self.screen, Barrier.color, piece, 0, 0)
-    # pg.draw.rect(self.screen, Barrier.color, self.rect, 0, 0)
-    # pg.draw.circle(self.screen, self.settings.bg_color, (self.rect.centerx, self.rect.bottom), self.rect.width/6)
+        pg.draw.rect(self.screen, Barrier.randcolor(), piece, 0, 0)
 
 
 class Barriers:
@@ -103,23 +96,9 @@ class Barriers:
     width = self.settings.screen_width / 10
     height = 2.0 * width / 4.0
     top = self.settings.screen_height - 2.1 * height
-
-    # rects = []         // NOT Pythonic -- interviewers want to see Pythonic code
-    # for i in range(4):
-    #   rects[i] = pg.Rect(i * 2 * width + 1.5 * width, top, width, height)
-
-        # Pythonic programming
     self.barriers = [Barrier(game=self.game, rect=pg.Rect(i * 2 * width + 1.5 * width, top, width, height)) for i in range(4)]   # SP w  3w  5w  7w  SP
 
-    # self.barriers = [Barrier(game=self.game, rect=rects[i]) for i in range(4)]
-
-  def hit(self): pass 
-
-  # def set_ship(self, ship):
-  #   for barrier in self.barriers: barrier.set_ship(ship)
-
-  # def set_alien_fleet(self, alien_fleet):
-  #   for barrier in self.barriers: barrier.set_alien_fleet(alien_fleet)
+  def hit(self): pass
   
   def reset(self):
     self.create_barriers()
@@ -127,6 +106,6 @@ class Barriers:
   def update(self):
     for barrier in self.barriers: barrier.update()
 
-  # def draw(self):
-#     for barrier in self.barriers: barrier.draw()
+  def draw(self):
+    for barrier in self.barriers: barrier.draw()
 

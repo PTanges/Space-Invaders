@@ -169,9 +169,6 @@ class Aliens():
     collisions = pg.sprite.groupcollide(self.ship.lasers.lasergroup(), self.lasers.lasergroup(),
                                         True, True)
 
-    # Todo: Barrier-Laser collisions
-    # Refer to MidtermPracticeExam
-
     for alien in self.alien_group.sprites():
       alien.update(self.v, delta_y)
 

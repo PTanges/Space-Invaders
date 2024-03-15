@@ -5,10 +5,10 @@ from lasers import Lasers
 from timer import Timer
 from vector import Vector 
 from time import sleep
-
+from random import randint
 
 class Ship(Sprite):
-  laser_image_files = [f'images/ship_laser_0{x}.png' for x in range(2)]
+  laser_image_files = [f'images/ship_laser_0{x}.png' for x in range(4, 10)]
   laser_images = [pg.image.load(x) for x in laser_image_files]
 
   def __init__(self, game, v=Vector()):
@@ -57,7 +57,11 @@ class Ship(Sprite):
 
   def cease_fire(self): self.continuous_fire = False
 
-  def fire(self): self.lasers.add(owner=self)
+  def fire(self):
+    timer = Timer(Ship.laser_images, start_index=randint(0, len(Ship.laser_images) - 1), delta=10)
+    self.lasers.add(owner=self, timer=timer)
+    # Todo: implement ship shooting sound sfx
+    # self.sound.play_phaser()
 
   def hit(self): 
     print('Abandon ship! Ship has been hit!')
@@ -91,7 +95,7 @@ class Ship(Sprite):
     self.rect.top += self.v.y * self.settings.ship_speed
     self.clamp()
     self.draw()
-    if self.continuous_fire and self.fire_counter % 8 == 0:   # slow down firing slightly
+    if self.continuous_fire and self.fire_counter % self.settings.ship_slow_fire_rate == 0:   # slow down firing slightly
       self.fire()
     self.fire_counter += 1
     self.lasers.update()

@@ -45,9 +45,10 @@ class Lasers():                                # can now have aliens or ship fir
 
   def lasergroup(self): return self.laser_group
 
-  def add(self, owner):         # all lasers in an instance have same v and timer
+  def add(self, owner, timer):         # all lasers in an instance have same v and timer
                                 #    but can have different owners (each Alien can shoot)
-    new_laser = Laser(self.game, v=self.v, timer=self.timer, owner=owner)
+    # new_laser = Laser(self.game, v=self.v, timer=self.timer, owner=owner)
+    new_laser = Laser(self.game, v=self.v, timer=timer, owner=owner)
     self.laser_group.add(new_laser) 
 
   def empty(self): self.laser_group.empty()

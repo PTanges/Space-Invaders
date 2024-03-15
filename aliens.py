@@ -1,7 +1,7 @@
 import pygame as pg
 import sys
 from pygame.sprite import Sprite
-from vector import Vector 
+from vector import Vector
 from random import randint
 from lasers import Lasers
 from timer import Timer
@@ -26,7 +26,7 @@ class Alien(Sprite):
 
   def __init__(self, game, row, alien_no):
     super().__init__()
-    self.game = game 
+    self.game = game
     self.screen = game.screen
     self.screen_rect = self.screen.get_rect()
     self.settings = game.settings
@@ -44,13 +44,13 @@ class Alien(Sprite):
     self.rect = self.image.get_rect()
 
     self.rect.x = self.rect.width
-    self.rect.y = self.rect.height 
+    self.rect.y = self.rect.height
 
     self.x = float(self.rect.x)
     self.isdying = False
-    self.reallydead = False 
+    self.reallydead = False
 
-  def laser_offscreen(self, rect): return rect.bottom > self.screen_rect.bottom  
+  def laser_offscreen(self, rect): return rect.bottom > self.screen_rect.bottom
   # Return True if laser's position > screen dimensions, ie out of bounds (OOB)
 
   def laser_start_rect(self):
@@ -64,15 +64,16 @@ class Alien(Sprite):
 
   def fire(self, lasers):
     # print(f'Alien {self.alien_no} firing laser')
-    lasers.add(owner=self)
+    timer = Timer(Aliens.laser_images, delta=10)
+    lasers.add(owner=self, timer=timer)
 
   def check_edges(self):
-    r = self.rect 
+    r = self.rect
     sr = self.screen_rect
     return r.right >= sr.right or r.left < 0
-  
-  def check_bottom(self): return self.rect.bottom >= self.screen_rect.bottom 
-  
+
+  def check_bottom(self): return self.rect.bottom >= self.screen_rect.bottom
+
   def update(self, v, delta_y):
     self.x += v.x
     self.rect.x = self.x
@@ -80,7 +81,7 @@ class Alien(Sprite):
     if self.explosiontimer.finished(): self.kill()
     self.draw()
 
-  def draw(self): 
+  def draw(self):
     self.image = self.timer.current_image()
     self.screen.blit(self.image, self.rect)
 
@@ -92,13 +93,13 @@ class Aliens():
   def __init__(self, game):
     self.game = game
     self.screen = game.screen
-    self.settings = game.settings 
+    self.settings = game.settings
     self.stats = game.stats
     self.sb = game.sb
     self.aliens_created = 0
     self.v = Vector(self.settings.alien_speed, 0)
     self.laser_timer = Timer(image_list=Aliens.laser_images, delta=10)
-    self.lasers = Lasers(game=game, v=Vector(0, 1) * self.settings.laser_speed, 
+    self.lasers = Lasers(game=game, v=Vector(0, 1) * self.settings.laser_speed,
                          timer=self.laser_timer, owner=self)
 
     self.alien_group = pg.sprite.Group()
@@ -112,18 +113,18 @@ class Aliens():
       alien.x = x
       alien.rect.x, alien.rect.y = x, y
       self.alien_group.add(alien)
-      
+
   def empty(self): self.alien_group.empty()
 
   def reset(self):
     self.alien_group.empty()
     self.lasers.empty()
-    self.create_fleet() 
-  
+    self.create_fleet()
+
   def create_fleet(self):
     self.fire_every_counter = 0
     alien = Alien(self.game, row=0, alien_no=-1)
-    alien_width, alien_height = alien.rect.size 
+    alien_width, alien_height = alien.rect.size
 
     x, y, row = alien_width, alien_height, 0
     self.aliens_created = 0
@@ -145,18 +146,18 @@ class Aliens():
     for alien in self.alien_group.sprites():
       if alien.check_bottom(): return True
     return False
-  
+
   def update(self):
     delta_y = 0
     if self.check_edges():
       delta_y = self.settings.fleet_drop
       self.v.x *= -1
-      
+
     if self.check_bottom(): self.ship.hit()
 
     # ship lasers taking out aliens
-    collisions = pg.sprite.groupcollide(self.ship.lasers.lasergroup(), self.alien_group, True, True)
-    if len(collisions) > 0: 
+    collisions = pg.sprite.groupcollide(self.alien_group, self.ship.lasers.lasergroup(), True, True)
+    if len(collisions) > 0:
       for alien in collisions:
         index = alien.timer.current_index()
         points = Alien.points[index]

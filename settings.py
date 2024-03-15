@@ -28,6 +28,9 @@ class Settings:
 
         self.alien_points = 50
 
+        self.ship_slow_fire_rate = 8
+        self.ship_fast_fire_rate = 2
+
     def increase_speed(self):
         # self.laser_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale

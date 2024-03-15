@@ -7,6 +7,8 @@ from vector import Vector
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
+from barriers import Barriers
+from sound import Sound
 
 
 class Game:
@@ -28,6 +30,7 @@ class Game:
     self.aliens = Aliens(game=self)  
     self.ship.set_aliens(self.aliens)
     self.ship.set_sb(self.sb)
+    self.barriers = Barriers(game=self)
     self.game_active = False              # MUST be before Button is created
     self.first = True
     self.play_button = Button(game=self, text='Play')
@@ -65,6 +68,7 @@ class Game:
     self.screen.fill(self.settings.bg_color)
     self.ship.reset()
     self.aliens.reset()
+    self.barriers.reset()
     self.settings.initialize_dynamic_settings()
 
   def game_over(self):
@@ -76,10 +80,12 @@ class Game:
     self.game_active = False
     self.stats.reset()
     self.restart()
+    self.sound.play_game_over()
 
   def activate(self): 
     self.game_active = True
     self.first = False
+    # TODO: self.sound.play_music("filename.wav")
 
   def play(self):
     finished = False
@@ -92,7 +98,8 @@ class Game:
         self.first = False
         self.screen.fill(self.settings.bg_color)
         self.ship.update()
-        self.aliens.update()   # when we have aliens
+        self.aliens.update()
+        self.barriers.update()
         self.sb.update()
       else:
         self.play_button.update()  

@@ -61,6 +61,8 @@ class Ship(Sprite):
 
   def hit(self): 
     print('Abandon ship! Ship has been hit!')
+    # Todo: add timer for ship explosion
+    # Todo: add sound for ship death sound
     time.sleep(0.2)
     self.stats.ships_left -= 1
     self.sb.prep_ships()
@@ -89,7 +91,7 @@ class Ship(Sprite):
     self.rect.top += self.v.y * self.settings.ship_speed
     self.clamp()
     self.draw()
-    if self.continuous_fire and self.fire_counter % 3 == 0:   # slow down firing slightly
+    if self.continuous_fire and self.fire_counter % 8 == 0:   # slow down firing slightly
       self.fire()
     self.fire_counter += 1
     self.lasers.update()

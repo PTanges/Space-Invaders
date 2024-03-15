@@ -14,7 +14,7 @@ class Scoreboard:
 
       self.text_color = (30, 30, 30)
       self.font = pg.font.SysFont(None, 48)
-      self.prep()
+      self.prep() # Initialize all values
       self.prep_high_score()
 
   def prep(self):

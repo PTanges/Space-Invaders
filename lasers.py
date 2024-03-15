@@ -1,9 +1,7 @@
 import pygame as pg
 from pygame.sprite import Sprite
-from vector import Vector 
-# from random import randint
-from timer import Timer
-
+from random import randint
+from timer import Timer # Use for the explosions (laser on laser collision)
 
 class Laser(Sprite):
   def __init__(self, game, v, timer, owner):

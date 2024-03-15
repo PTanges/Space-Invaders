@@ -6,13 +6,21 @@ from random import randint
 from lasers import Lasers
 from timer import Timer
 
+# Todo: Add a UFO. Count number of bounces, once bounce > 3, spawn chance to spawn a UFO
+# May need to add that into alien_invasion
 
 class Alien(Sprite):
   names = ['bunny', 'pig', 'stalk_eyes', 'w_heart', 'w_pigtails', 'wild_tentacles']
-  points = [10, 25, 300, 35, 100, 600]
-  images = [pg.image.load(f'images/alien_{name}.png') for name in names] 
-  # nameslen = len(names)
-  # choices = [randint(0, nameslen) for _ in range(nameslen)]
+  points = [60, 80, 100, 200, 300, 500]
+  images = [pg.image.load(f'images/alien_{name}.png') for name in names] # Alien images
+
+  explode60_images = [pg.transform.scale(pg.image.load(f'images/explode_60_0{x}.png'), (80,80)) for x in range(0, 5)]
+  explode80_images = [pg.transform.scale(pg.image.load(f'images/explode_80_0{x}.png'), (80,80)) for x in range(0, 5)]
+  explode100_images = [pg.transform.scale(pg.image.load(f'images/explode_100_0{x}.png'), (80, 80)) for x in range(0, 5)]
+  explode200_images = [pg.transform.scale(pg.image.load(f'images/explode_200_0{x}.png'), (80, 80)) for x in range(0, 5)]
+  explode300_images = [pg.transform.scale(pg.image.load(f'images/explode_300_0{x}.png'), (80, 80)) for x in range(0, 5)]
+  explode500_images = [pg.transform.scale(pg.image.load(f'images/explode_500_0{x}.png'), (80, 80)) for x in range(0, 5)]
+  explosionimages = [explode60_images, explode80_images, explode100_images, explode200_images, explode300_images, explode500_images]
 
   li = [x * x for x in range(1, 11)]
 
@@ -24,13 +32,15 @@ class Alien(Sprite):
     self.settings = game.settings
 
     self.regtimer = Timer(Alien.images, start_index=randint(0, len(Alien.images) - 1), delta=20)
-    # self.explosiontimer = Timer(Alien.explosionimages, delta=20, looponce=True)
+    no_aliens = len(Alien.images) - 1
+    index = alien_no % no_aliens
+    self.points = Alien.points[index]
+
+    self.explosiontimer = Timer(Alien.explosionimages[index], delta=6, looponce=True)
     self.timer = self.regtimer
 
-    self.image = Alien.images[row % len(Alien.names)]
+    self.image = Alien.images[index]
     self.alien_no = alien_no
-    # self.image = Alien.images[randint(0, 5)]
-    # self.image = Alien.images[Alien.choices[row % len(Alien.names)]]
     self.rect = self.image.get_rect()
 
     self.rect.x = self.rect.width
@@ -41,11 +51,16 @@ class Alien(Sprite):
     self.reallydead = False 
 
   def laser_offscreen(self, rect): return rect.bottom > self.screen_rect.bottom  
+  # Return True if laser's position > screen dimensions, ie out of bounds (OOB)
 
   def laser_start_rect(self):
     rect = self.rect
     rect.midbottom = self.rect.midbottom
     return rect.copy()
+
+  def hit(self):
+    self.isdying = True
+    self.timer = self.explosiontimer
 
   def fire(self, lasers):
     # print(f'Alien {self.alien_no} firing laser')
@@ -62,6 +77,7 @@ class Alien(Sprite):
     self.x += v.x
     self.rect.x = self.x
     self.rect.y += delta_y
+    if self.explosiontimer.finished(): self.kill()
     self.draw()
 
   def draw(self): 
@@ -137,7 +153,7 @@ class Aliens():
       self.v.x *= -1
       
     if self.check_bottom(): self.ship.hit()
-    
+
     # ship lasers taking out aliens
     collisions = pg.sprite.groupcollide(self.ship.lasers.lasergroup(), self.alien_group, True, True)
     if len(collisions) > 0: 
@@ -150,8 +166,11 @@ class Aliens():
       self.sb.check_high_score()
 
     # laser-laser collisions
-    collisions = pg.sprite.groupcollide(self.ship.lasers.lasergroup(), self.lasers.lasergroup(), 
+    collisions = pg.sprite.groupcollide(self.ship.lasers.lasergroup(), self.lasers.lasergroup(),
                                         True, True)
+
+    # Todo: Barrier-Laser collisions
+    # Refer to MidtermPracticeExam
 
     for alien in self.alien_group.sprites():
       alien.update(self.v, delta_y)

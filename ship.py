@@ -95,7 +95,7 @@ class Ship(Sprite):
     self.rect.top += self.v.y * self.settings.ship_speed
     self.clamp()
     self.draw()
-    if self.continuous_fire and self.fire_counter % self.settings.ship_slow_fire_rate == 0:   # slow down firing slightly
+    if self.continuous_fire and self.fire_counter % self.settings.ship_fast_fire_rate == 0:
       self.fire()
     self.fire_counter += 1
     self.lasers.update()

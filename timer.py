@@ -14,8 +14,10 @@ class Timer:
       if self.index >= len(self.image_list) and not self.looponce:
         self.index = 0
 
+
   def finished(self): 
-    return self.looponce and self.index >= len(self.image_list)
+    finished = self.looponce and self.index >= len(self.image_list) - 1
+    return finished
   
   def current_index(self): return self.index
 

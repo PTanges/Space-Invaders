@@ -6,7 +6,7 @@ import time
 class Sound:
     def __init__(self):
         mixer.init()
-        self.phaser_sound = mixer.Sound("sounds/st_phaser.wav")
+        self.phaser_sound = mixer.Sound("sounds/alienlaser.wav")
         self.volume = 0.1
         self.set_volume(self.volume)
 
@@ -33,6 +33,6 @@ class Sound:
 
     def play_game_over(self):
         self.stop_music()
-        self.play_music("sounds/game_over.wav")
-        time.sleep(6.5)
+        self.play_music("sounds/gameover.wav")
+        time.sleep(2.9)
         self.stop_music()

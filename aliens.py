@@ -1,3 +1,5 @@
+import time
+
 import pygame as pg
 from pygame.sprite import Sprite
 from vector import Vector
@@ -274,7 +276,12 @@ class Aliens():
             self.create_fleet()
             self.settings.increase_speed()
             self.stats.level += 1
+            self.game.sound.pause_music()
+            self.game.sound.play_level_transition()
+            self.game.sound.unpause_music()
             self.sb.prep_level()
+            self.stats.ships_left += 1
+            return
 
         # aliens hitting the ship
         if pg.sprite.spritecollideany(self.ship, self.alien_group) or pg.sprite.spritecollideany(self.ship, self.ufo_group):

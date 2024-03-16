@@ -66,6 +66,7 @@ class Game:
                     self.ship.fire_everything()
                     self.sound.play_phaser()
                 elif key == pg.K_p:
+                    self.sound.unpause_music()
                     self.play_button.select(True)
                     self.play_button.press()
                 elif key in Game.key_velocity:
@@ -97,7 +98,7 @@ class Game:
         self.game_active = False
         self.stats.reset()
         self.restart()
-        self.sound.stop_music()
+        self.sound.pause_music()
         self.sound.play_game_over()
 
     def activate(self):

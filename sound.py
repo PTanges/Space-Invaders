@@ -9,8 +9,13 @@ class Sound:
         mixer.init()
         self.phaser_sound = mixer.Sound("sounds/alienlaser.wav")
         self.ship_hit = mixer.Sound("sounds/Ship_Hit.wav")
+        self.transition = mixer.Sound("sounds/Transition.wav")
         self.volume = 0.1
         self.set_volume(self.volume)
+        '''
+        # Better format
+        self.sound_library = {'KEY' : mixer.Sound(string)} ...
+        '''
 
     def set_volume(self, volume=0.3):
         mixer.music.set_volume(volume)
@@ -35,6 +40,9 @@ class Sound:
 
     def play_ship_explosion(self):
         mixer.Sound.play(self.ship_hit)
+
+    def play_level_transition(self):
+        mixer.Sound.play(self.transition)
 
     def play_game_over(self):
         self.stop_music()

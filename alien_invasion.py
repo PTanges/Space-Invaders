@@ -89,6 +89,7 @@ class Game:
 
     def game_over(self):
         print('Game Over !')
+        self.sb.output_high_score(round(self.stats.high_score, -1))
         pg.mouse.set_visible(True)
         self.play_button.change_text('Play again?')
         self.play_button.show()

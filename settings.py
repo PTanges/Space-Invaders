@@ -19,6 +19,8 @@ class Settings:
 
         self.aliens_fireevery = 30
 
+        self.ufo_spawn_chance = 25 # by percentage
+
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):

@@ -1,3 +1,14 @@
+'''
+Student Name: Patton Tang
+Institution: California State University, Fullerton
+Date: 2024-03-15
+Course: CPSC 386 with Professor McCarthy
+
+Credits:
+Base Code & Initial Assets (SFX Sourced from Internet): McCarthy
+... (To Be added)
+'''
+
 import sys, time
 import pygame as pg
 from settings import Settings

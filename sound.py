@@ -2,6 +2,7 @@ import pygame as pg
 from pygame import mixer
 import time
 
+# Todo: After game restart (game over), music does not correctly replay despite either unpause nor play
 
 class Sound:
     bgm = "sounds/Moog_City.mp3"

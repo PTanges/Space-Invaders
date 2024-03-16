@@ -6,7 +6,8 @@ Course: CPSC 386 with Professor McCarthy
 
 Credits:
 Base Code & Initial Assets (SFX Sourced from Internet): McCarthy
-... (To Be added)
+Moog City 2 (Background Music): C418 (License Purchased)
+Assorted SFX: Toby Fox
 '''
 
 import sys, time
@@ -95,16 +96,17 @@ class Game:
         self.game_active = False
         self.stats.reset()
         self.restart()
+        self.sound.stop_music()
         self.sound.play_game_over()
 
     def activate(self):
         self.game_active = True
         self.first = False
-        # TODO: self.sound.play_music("filename.wav")
 
     def play(self):
         finished = False
         self.screen.fill(self.settings.bg_color)
+        self.sound.play_music(self.sound.bgm)
 
         while not finished:
             self.check_events()  # exits if Cmd-Q on macOS or Ctrl-Q on other OS

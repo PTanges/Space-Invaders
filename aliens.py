@@ -5,9 +5,6 @@ from random import randint
 from lasers import Lasers
 from timer import Timer
 
-# Todo: Add a UFO. Count number of bounces, once bounce > 3, spawn chance to spawn a UFO
-# May need to add that into alien_invasion
-
 class UFO(Sprite):
     names = ['ufo']
     images = [pg.image.load(f'images/alien_{name}.png') for name in names]

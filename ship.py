@@ -11,6 +11,8 @@ class Ship(Sprite):
   laser_image_files = [f'images/ship_laser_0{x}.png' for x in range(4, 10)]
   laser_images = [pg.image.load(x) for x in laser_image_files]
 
+  ship_explosion_images = [pg.image.load(f'images/ship_explode{x}.png') for x in range(0,6)]
+
   def __init__(self, game, v=Vector()):
     super().__init__()
     self.game = game 
@@ -20,6 +22,7 @@ class Ship(Sprite):
     self.laser_timer = Timer(image_list=Ship.laser_images, delta=10)
     self.lasers = Lasers(game=game, v=Vector(0, -1) * self.settings.laser_speed, 
                          timer=self.laser_timer, owner=self)
+    self.shiptimer = Timer(Ship.ship_explosion_images, delta=10, looponce=True)
     self.aliens = game.aliens
     self.continuous_fire = False
     self.screen = game.screen 
@@ -30,6 +33,9 @@ class Ship(Sprite):
 
     self.rect.midbottom = self.screen_rect.midbottom 
     self.fire_counter = 0
+
+    self.isdying = False
+    self.isreallydead = False
 
   def set_aliens(self, aliens): self.aliens = aliens
 
@@ -65,9 +71,11 @@ class Ship(Sprite):
 
   def hit(self): 
     print('Abandon ship! Ship has been hit!')
-    # Todo: add timer for ship explosion
-    # Todo: add sound for ship death sound
-    time.sleep(0.2)
+    self.isdying = True
+    self.game.sound.play_ship_explosion()
+    self.timer = self.shiptimer
+    # time.sleep(2.5)
+
     self.stats.ships_left -= 1
     self.sb.prep_ships()
     if self.stats.ships_left <= 0:
@@ -91,6 +99,10 @@ class Ship(Sprite):
     self.center_ship()
 
   def update(self):
+    if self.shiptimer.finished():
+      self.isreallydead = True
+      self.kill()
+
     self.rect.left += self.v.x * self.settings.ship_speed
     self.rect.top += self.v.y * self.settings.ship_speed
     self.clamp()

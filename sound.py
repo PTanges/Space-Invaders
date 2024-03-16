@@ -11,6 +11,7 @@ class Sound:
         self.phaser_sound = mixer.Sound("sounds/alienlaser.wav")
         self.ship_hit = mixer.Sound("sounds/Ship_Hit.wav")
         self.transition = mixer.Sound("sounds/Transition.wav")
+        self.outer_wild = mixer.Sound("sounds/approaching.wav")
         self.volume = 0.1
         self.set_volume(self.volume)
         '''
@@ -44,6 +45,9 @@ class Sound:
 
     def play_level_transition(self):
         mixer.Sound.play(self.transition)
+
+    def play_approaching_sfx(self):
+        mixer.Sound.play(self.outer_wild)
 
     def play_game_over(self):
         self.stop_music()

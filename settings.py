@@ -20,6 +20,8 @@ class Settings:
         self.aliens_fireevery = 30
 
         self.ufo_spawn_chance = 25 # by percentage
+        self.ufo_spawn_delay = 2 # number of screen bounces
+        self.ufo_spawn_limit = 1 # number of UFO's, int >= 0
 
         self.initialize_dynamic_settings()
 

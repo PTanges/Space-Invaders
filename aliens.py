@@ -214,7 +214,8 @@ class Aliens():
 
 
             # Spawn max (1) UFO after two bounces % of the time
-            if self.bounces >= 2 and randint(0, 100) <= self.settings.ufo_spawn_chance and len(self.ufo_group.sprites()) <= 0:
+            if self.bounces >= self.settings.ufo_spawn_delay and randint(0, 100) <= self.settings.ufo_spawn_chance and len(self.ufo_group.sprites()) < self.settings.ufo_spawn_limit:
+                self.game.sound.play_approaching_sfx()
                 ufo = UFO(self.game, row=0, explosionimages=self.explosionimages)
                 alien_width, alien_height = ufo.rect.size
                 x, y, row = alien_width, alien_height, 0
